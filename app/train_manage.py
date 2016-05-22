@@ -22,7 +22,6 @@ class manage:
         else :
            js = json.loads(p) 
         return df
-
     def savePatchData(self,df):
         p = path.join(path.join(self.workingdir,self.train1Folder),self.train1patchdata)
         json.dumps(p)
