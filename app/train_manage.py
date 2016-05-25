@@ -20,9 +20,13 @@ class manage:
         if not path.exists(p):
             df = pd.DataFrame(columns=[['image','patchr','patchc','feature']])
         else :
-           js = json.loads(p) 
+           df  = pd.read_json(p) 
         return df
     def savePatchData(self,df):
         p = path.join(path.join(self.workingdir,self.train1Folder),self.train1patchdata)
-        json.dumps(p)
+        df.to_json(p)
         print "saved " + p
+    
+    def getBasename(self,lst):
+        l = [path.basename(x) for x in lst]
+        return l
