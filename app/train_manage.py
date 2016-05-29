@@ -3,8 +3,8 @@ import pandas as pd
 import json
 
 class manage:
-    train1Folder = 'train1Imgs'
-    workingdir = '/usr/local/hadoop/project/sfddd'
+    train1Folder = 'static/train1Imgs'
+    workingdir = '/usr/local/hadoop/project/sfddd/app'
     train1patchdata = 'patchdata.json'
  
     def getTrain1List(self):

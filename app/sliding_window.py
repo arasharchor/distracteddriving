@@ -29,8 +29,7 @@ class slidingw:
         if len(filtered) > 0 :
             nextitem = filtered[0]
             idx = idxname.index(nextitem)
-            path = lf[idx]
-            return path
+            return self.getFilename(lf[idx])
         else :
             return None
         # if item is in df but does not have all features set, return it

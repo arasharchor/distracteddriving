@@ -1,0 +1,93 @@
+<html>
+<head>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src='../../static/jquery.elevatezoom.js'></script> 
+<style>
+    body {background-color:lightgrey;}
+    div.img-main{width:640px;float:left }
+    div.col-right{width:240px;float:left;padding-left:10}
+    .buttselector{}
+    div.position{}
+</style>
+<script>
+    // a model used to track the application state and selections
+    $.model = new Object();
+    $.model.mode = 'None';
+    $.model.labels = [];
+    // function to get the mouse x postition on the image
+    $.model.getX= function(item){
+            var offset = item.offset();
+            var x = event.pageX - offset.left ;
+            return x;
+        };
+    // function to get the mouse y position on the image
+    $.model.getY= function(item){
+            var offset = item.offset();
+            var y = event.pageY - offset.left -10 ;
+            return y;
+        };
+    // function to find a label in the list if it's already there
+    $.model.findLabel = function(s){
+        var matches = $.model.labels.filter(function(element){return element['Label']==s;});
+        if (matches.length > 0){return matches[0];}
+        else return null;
+    };
+
+    $(function(){
+    // wire up zoom feature
+    //$("#img-main").elevateZoom({ zoomType    : "lens", lensShape : "round", lensSize : 250,scrollZoom : true }); 
+    $('.buttselector').click(function(e) {
+                $.model.mode = $(this).text();
+                console.log('Awaiting click for : ' + $(this).text());
+        $('div.img-main').css('cursor','crosshair');
+        $('div.img-main').mousemove(
+            function(){ 
+                var msg = $.model.getX($(this)) + ","  +  $.model.getX($(this));
+                $('div.position').text(msg);
+                $( "div.img-main" ).click(function() {
+                    if($.model.mode != 'None')
+                    {
+                        var x = $.model.getX($(this));
+                        var y = $.model.getY($(this));
+                        console.log('img-main clicked on ' + $.model.mode +  ' at ' + x + ',' + y);
+                        $('div.img-main').css('cursor','pointer');
+                        var found = $.model.findLabel($.model.mode);
+                        console.log(found);
+                        if( found == null)
+                        {
+                            $.model.labels.push({Label:$.model.mode,X:x,Y:y});
+                        }
+                        else{
+                            found['X'] = x;
+                            found['Y'] = y
+                        }
+                        $('#' + $.model.mode).text(x +','+y);
+                        $.model.mode = 'None';
+                    }
+
+                    // $('div.img-main').mousemove(function(){});
+                    });            
+            }
+          );
+     })
+});
+</script>
+<title>
+    Manual location entry for  {{imgname}} 
+</title>
+</head>
+<body>
+    <hr/>
+    <div class='img-main'>
+        <img id='img-main' src='../../static/train1Imgs/{{imgname}}'></img>
+    </div>
+    <div class='col-right'>
+    
+        <h3>Choose locations</h3>
+        <div class='position'></div>
+        {% for label in labels %}
+        <div>
+        <button type='button' id='{{ label }}_button' class='buttselector'>{{ label }}</button> <span id='{{ label }}' class='selectedPosition'></span></div>
+        <div>
+        {% endfor %}
+    </div>
