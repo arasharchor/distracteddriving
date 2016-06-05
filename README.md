@@ -25,3 +25,9 @@ Once a set of images have been labeled a process takes the labels and generates 
 returns a 64x48 patch from the image like this : 
 ![Patch Example](patch1.png)
 
+### First stage detector
+This image data along with the overall image location the patch is taken from will be our training input to the first stage detector. The network will receive the patch relative position of 0 or 1 labelled feature.  The following two conditions are possible.
+* No feature is detected, in which case the correct output will be Y{ x:-1, y:-1, h:-1}
+* A feature is detected -> Y{x:<patch relative x location>, y:<patch relative y location>, h:1}
+
+
