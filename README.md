@@ -26,8 +26,18 @@ returns a 64x48 patch from the image like this :
 ![Patch Example](patch1.png)
 
 ### First stage detector
-This image data along with the overall image location the patch is taken from will be our training input to the first stage detector. The network will receive the patch relative position of 0 or 1 labelled feature.  The following two conditions are possible.
-* No feature is detected, in which case the correct output will be Y{ x:-1, y:-1, h:-1}
+This image data along with the overall image location the patch is taken from will be our training input to the first stage detector. The network will be trained by receiving a series of image patches extracted from the manually labelled set.  These patches are expressed as numpy arrays with the relative position of 0 or 1 labelled feature.  The following two conditions are possible.
+* No feature is present, in which case the correct output will be Y{ x:-1, y:-1, h:-1}
 * A feature is detected -> Y{x:<patch relative x location>, y:<patch relative y location>, h:1}
+#### Extracting feature labelled patches
+* Load the list of labelled patches from static/train1Imgs/patchdata.json
+* For each labeled image, for each label type
+** Create 10 patches where the labelled location is visible
+** Create a fann .net file for each labelled type containing training data with a mix of patches with and without the labels
+
+The format of the .net file is as follows:
+* first line - 3 number seperated by space  x y z where x is the number of training samples, y is the number of inputs and z is the number of outputs
+* the rest of the file is line in pairs with the first of the pair having a list of the input values seperated by spaces
+* the second line of each pair is the outputs
 
 

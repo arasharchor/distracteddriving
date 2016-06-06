@@ -15,16 +15,20 @@ class slidingw:
          
     def getpatch(self,img, row,col):
         a = self.loadimage(img)
+        startpos = self.getpatchlocation(row, col)
+        return a[startpos[1]:startpos[1] + self.patchsize[1], startpos[0]:startpos[0] + self.patchsize[0]]
+    
+    def getpatchlocation(self,row,col):
         startr = self.patchsize[1] * row/10
         startc = self.patchsize[0] * col/10
-        return a[startr:startr + self.patchsize[1], startc:startc + self.patchsize[0]]
-       
+        return(startc,startr)
         #print 'getpatch not implemented'
+    
     def featurePosition(feature, imageName, row,col):
         # for image patches which contain the feature return the following training features
         #   return Y as the specified feature's patch relative x and y 
-        #   return X as the image relative x and y positions 
-        #   both of these will be scaled 
+        #   return X as the image relative x and y positions of the top left corner of the patch
+        #   both of these will be scaled
         #   Y is scaled so that 0 is the center of the patch 
         #   -x values are left of center +x values are right of center 
         #   -y values are above center +y values are below center 
