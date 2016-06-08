@@ -29,6 +29,7 @@ class net_reducer:
 					self.d[data[1]].append( ' '.join(map(str,p[1:10])))
 				else:
 					print 'Invalid pixels size for : ' + data[0] + ' ' + str(float(data[2])) + ',' + str(float(data[3])) + ' size : ' +  str(pixels)
+					#print data
 			except:
 				e = sys.exc_info()[0]
 				print 'error in getpatch ' + data[0] + str(data[2]) + str(data[3])
@@ -43,7 +44,10 @@ def main(argv):
 	for line in sys.stdin:
 		try:
 			data = line.split(',')
-			nr.process_line(data)
+			if len(data) < 4:
+				print 'line did not contain 4 items :' + line
+			else:
+				nr.process_line(data)
 		except :
 			e = sys.exc_info()[0]
 			print 'error ' + str( e)

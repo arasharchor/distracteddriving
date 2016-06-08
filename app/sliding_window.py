@@ -77,9 +77,11 @@ class slidingw:
 			# offset is the number of pixels to move the patch or how far the center has moved
 			# negative is left/up + is right/down
 			offset = (randint(-(self.patchsize[0]/2 -10), self.patchsize[0]/2 -10) ,randint(-(self.patchsize[1]/2) -10, self.patchsize[1]/2 - 10))
-			imgPosition = (centerX + offset[0], centerY + offset[1])
+			imgPosition = (max(centerX + offset[0],0) , max(centerY + offset[1],0))
+			#print imgPosition
 			imgOffsets.append(imgPosition)
-			patchPositions.append(((imgPosition[0] - self.patchsize[0]/2)/640.0 * 100, (imgPosition[1] - self.patchsize[0]/2)/480.0 * 100, offset[0], offset[1]))
+			patchscaled = (((max(imgPosition[0] - self.patchsize[0]/2,0))/640.0 * 100), (max(imgPosition[1] - self.patchsize[0]/2,0))/480.0 * 100, offset[0], offset[1])
+			patchPositions.append(patchscaled)
 		return patchPositions
 
 

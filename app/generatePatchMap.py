@@ -1,18 +1,31 @@
 #!/usr/bin/python
 from train_manage import manage
 from sliding_window import slidingw
+import sys
+import json
+class mapper:
+	m = manage()
+	df = m.loadPatchData()
+	s = slidingw(640.0,480.0)
+	litems = []
+	patches = []
+	cnt = 5
+	def perform_map(self):
+		for l in self.m.train1Labels:
+			for row in self.df.itertuples():
+				if getattr(row,'Image'):
+					X = {'Image':getattr(row,'Image'),'x':getattr(row,l + '_X'),'y':getattr(row,l + '_Y')}
+					X['PatchPositions'] = self.s.generateIntersectingPatches(X['x'],X['y'],self.cnt)
+					X['Label'] = l
+					self.litems.append(X)
+					
+		
+def main(args):
+	m = mapper()
+	m.perform_map()
+	for x in m.litems:
+		print json.dumps(x)
 
-m = manage()
-df = m.loadPatchData()
-s = slidingw(640.0,480.0)
-litems = []
-for l in m.train1Labels:
-    for row in df.itertuples():
-        if getattr(row,'Image'):
-            litems.append((getattr(row,'Image'),getattr(row,l + '_X'),getattr(row,l + '_Y')))
-
-    for item in litems:
-        ip = s.generateIntersectingPatches(item[1],item[2],4)
-        for i in ip:
-            print '{},{},{},{},{},{}'.format( item[0] ,l , i[0], i[1], i[2]/s.patchsize[0],i[3]/s.patchsize[1])
+if __name__ == "__main__":
+	main(sys.argv)
 
